@@ -1,0 +1,2340 @@
+{
+  "info": {
+    "_postman_id": "db412ce4-0227-4e96-a42e-055b4e068953",
+    "name": "QA Sandbox API Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "13091387",
+    "_collection_link": "https://go.postman.co/collection/13091387-db412ce4-0227-4e96-a42e-055b4e068953?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "01-Authentication",
+      "item": [
+        {
+          "name": "Register",
+          "item": [
+            {
+              "name": "Register user - valid data",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 201\", function () {\n    pm.response.to.have.status(201);\n});"
+                    ]
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const username = `qa_user_${Date.now()}`;\n\npm.environment.set(\"userName\", username);\n\nconsole.log(\"Registering user:\", username);"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"{{userName}}\",\n  \"password\": \"{{userPassword}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/register",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "register"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Register - duplicate username",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 400\", function () {\n    pm.response.to.have.status(400);\n});\n\npm.test(\"Response body contains error message\", function () {\n    pm.expect(pm.response.text()).to.include(\n        \"Пользователь уже существует или ошибка БД\");\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"{{userName}}\",\n  \"password\": \"{{userPassword}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/register",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "register"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Register - missing username",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 400\", function () {\n    pm.response.to.have.status(400);\n});\n\npm.test(\"Response body contains error message\", function () {\n    pm.expect(pm.response.text()).to.include(\n        \"Логин и пароль обязательны.\");\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"\",\n  \"password\": \"{{userPassword}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/register",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "register"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Register - missing password",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 400\", function () {\n    pm.response.to.have.status(400);\n});\n\npm.test(\"Response body contains error message\", function () {\n    pm.expect(pm.response.text()).to.include(\n        \"Логин и пароль обязательны.\");\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"{{userName}}\",\n  \"password\": \"\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/register",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "register"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "item": [
+            {
+              "name": "Login - valid credentials",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.environment.unset(\"accessToken\");\n\npm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response is JSON\", function () {\n    pm.response.to.be.json;\n});\n\nif (pm.response.code === 200 && pm.response.to.be.json) {\n    const response = pm.response.json();\n\n    pm.test(\"Response body contains token\", function () {\n        pm.expect(response).to.have.property(\"token\");\n    });\n\n    pm.test(\"Token is a string\", function () {\n        pm.expect(response.token).to.be.a(\"string\");\n    });\n\n    pm.test(\"Token is not empty\", function () {\n        pm.expect(response.token).to.not.be.empty;\n    });\n\n    if (typeof response.token === \"string\" && response.token.length > 0) {\n        pm.environment.set(\"accessToken\", response.token);\n    }\n}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"{{userName}}\",\n  \"password\": \"{{userPassword}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Login - invalid password",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 401\", function () {\n    pm.response.to.have.status(401);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\"Неверные данные\");\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"{{userName}}\",\n  \"password\": \"{{invalidUserPassword}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Login - unknown username",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 401\", function () {\n    pm.response.to.have.status(401);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\"Неверные данные\");\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"unknown_user\",\n  \"password\": \"{{userPassword}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Login - missing username",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 401\", function () {\n    pm.response.to.have.status(401);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\"Неверные данные\");\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"password\": \"{{userPassword}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Login - missing password",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 500\", function () {\n    pm.response.to.have.status(500);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\"Ошибка сервера\");\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"{{userName}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Login - empty body",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 401\", function () {\n    pm.response.to.have.status(401);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\"Неверные данные\");\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ],
+      "auth": {
+        "type": "noauth"
+      }
+    },
+    {
+      "name": "02-Mythology",
+      "item": [
+        {
+          "name": "GET-Read",
+          "item": [
+            {
+              "name": "Get all characters",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response body is an array\", function () {\n    const response = pm.response.json();\n    pm.expect(response).to.be.an('array');\n});\n\npm.test(\"Each character has required fields\", function () {\n    const response = pm.response.json();\n    response.forEach((character) => {\n        pm.expect(character).to.include.all.keys(\n            \"id\", \"name\", \"category\", \"desc\", \"img\"\n        );\n    });\n});\n\npm.test(\"Character field have correct types\", function () {\n    const response = pm.response.json();\n    response.forEach((character) => {\n        pm.expect(character.id).to.be.a('number');\n        pm.expect(character.name).to.be.a('string');\n        pm.expect(character.category).to.be.a('string');\n        pm.expect(character.desc).to.be.a('string');\n        \n        pm.expect(\n            character.img === null ||\n            typeof character.img === \"string\"\n        ).to.be.true;\n    });\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/mythology",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get character by valid ID",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response body is json\", function () {\n    pm.response.to.be.json;\n});\n\nconst response = pm.response.json();\n\npm.test(\"Response body is an object\", function () {\n    pm.expect(response).to.be.an(\"object\");\n    pm.expect(response).not.to.be.an(\"array\");\n});\n\npm.test(\"Response contains required fields\", function () {\n    pm.expect(response).to.include.all.keys(\n        \"id\", \"name\", \"category\", \"desc\", \"img\"\n    );\n});\n\npm.test(\"Character field have correct types\", function () {\n    pm.expect(response.id).to.be.a('number');\n    pm.expect(response.name).to.be.a('string');\n    pm.expect(response.category).to.be.a('string');\n    pm.expect(response.desc).to.be.a('string');\n    pm.expect(response.img).to.be.a('string');\n});\n\npm.test(\"Returned ID matches requested ID\", function () {\n    const requestedId = Number(pm.variables.get(\"characterId\"));\n    pm.expect(response.id).to.equal(requestedId);\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{characterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{characterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get character - invalid ID format",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 400\", function () {\n    pm.response.to.have.status(400);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\n        \"ID должен быть положительным целым числом.\");\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{invalidCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{invalidCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get character - not found",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 404\", function () {\n    pm.response.to.have.status(404);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\"Персонаж не найден\");\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{nonExistentCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{nonExistentCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "POST-Create",
+          "item": [
+            {
+              "name": "Create character - valid data",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 201\", function () {\n    pm.response.to.have.status(201);\n});\n\npm.test(\"Response body is json\", function () {\n    pm.response.to.be.json;\n});\n\nif (pm.response.code === 201 && pm.response.to.be.json) {\n    const response = pm.response.json();\n\n    const requestBody = JSON.parse(\n        pm.variables.replaceIn(pm.request.body.raw)\n    );\n\n    pm.test(\"Response body is an object\", function () {\n        pm.expect(response).to.be.an(\"object\");\n        pm.expect(response).not.to.be.an(\"array\");\n    });\n\n    pm.test(\"Response contains required fields\", function () {\n        pm.expect(response).to.include.all.keys(\n            \"id\", \"name\", \"category\", \"desc\", \"img\"\n        );\n    });\n\n    pm.test(\"Character fields have correct types\", function () {\n        pm.expect(response.id).to.be.a(\"number\");\n        pm.expect(response.name).to.be.a(\"string\");\n        pm.expect(response.category).to.be.a(\"string\");\n        pm.expect(response.desc).to.be.a(\"string\");\n        pm.expect(response.img).to.be.a(\"string\");\n    });\n\n    pm.test(\"Response matches request data\", function () {\n        pm.expect(response.name).to.eql(requestBody.name);\n        pm.expect(response.category).to.eql(requestBody.category);\n        pm.expect(response.desc).to.eql(requestBody.desc);\n        pm.expect(response.img).to.eql(requestBody.img);\n    });\n\n    pm.test(\"Created character ID is valid\", function () {\n        pm.expect(response.id).to.be.a(\"number\");\n        pm.expect(response.id).to.be.above(0);\n        pm.expect(Number.isInteger(response.id)).to.be.true;\n    });\n\n    // Save ID only if the response is valid\n    const validResponse =\n        response &&\n        Number.isInteger(response.id) &&\n        response.id > 0 &&\n        response.name === requestBody.name &&\n        response.category === requestBody.category &&\n        response.desc === requestBody.desc &&\n        response.img === requestBody.img;\n\n    if (validResponse) {\n        pm.environment.set(\"createdCharacterId\", response.id);\n    }\n};"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Гера\",\n  \"category\": \"gods\",\n  \"desc\": \"Жена Зевса, царица богов, покровительница брака и семьи\",\n  \"img\": \"https://example.com/gera.jpg\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/mythology",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create character - missing name",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\npm.test(\"Status code is 400\", function () {\n    pm.response.to.have.status(400);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\n        \"Поля name и category обязательны.\"\n    );\n});\n\npm.test(\"Response does not contain character fields\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.not.have.any.keys(\n        \"id\", \"name\", \"category\", \"desc\", \"img\"\n    );\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"\",\n  \"category\": \"gods\",\n  \"desc\": \"Жена Зевса, царица богов, покровительница брака и семьи\",\n  \"img\": \"https://example.com/gera.jpg\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/mythology",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create character - missing category",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\npm.test(\"Status code is 400\", function () {\n    pm.response.to.have.status(400);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\n        \"Поля name и category обязательны.\"\n    );\n});\n\npm.test(\"Response does not contain character fields\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.not.have.any.keys(\n        \"id\", \"name\", \"category\", \"desc\", \"img\"\n    );\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Гера\",\n  \"category\": \"\",\n  \"desc\": \"Жена Зевса, царица богов, покровительница брака и семьи\",\n  \"img\": \"https://example.com/gera.jpg\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/mythology",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create character - unknown category",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 201\", function () {\n    pm.response.to.have.status(201);\n});\n\npm.test(\"Response body is json\", function () {\n    pm.response.to.be.json;\n});\n\nif (pm.response.code === 201 && pm.response.to.be.json) {\n    const response = pm.response.json();\n\n    const requestBody = JSON.parse(\n        pm.variables.replaceIn(pm.request.body.raw)\n    );\n\n    pm.test(\"Response body is an object\", function () {\n        pm.expect(response).to.be.an(\"object\");\n        pm.expect(response).not.to.be.an(\"array\");\n    });\n\n    pm.test(\"Response contains required fields\", function () {\n        pm.expect(response).to.include.all.keys(\n            \"id\", \"name\", \"category\", \"desc\", \"img\"\n        );\n    });\n\n    pm.test(\"Character fields have correct types\", function () {\n        pm.expect(response.id).to.be.a(\"number\");\n        pm.expect(response.name).to.be.a(\"string\");\n        pm.expect(response.category).to.be.a(\"string\");\n        pm.expect(response.desc).to.be.a(\"string\");\n        pm.expect(response.img).to.be.a(\"string\");\n    });\n\n    pm.test(\"Response matches request data\", function () {\n        pm.expect(response.name).to.eql(requestBody.name);\n        pm.expect(response.category).to.eql(requestBody.category);\n        pm.expect(response.desc).to.eql(requestBody.desc);\n        pm.expect(response.img).to.eql(requestBody.img);\n    });\n\n    pm.test(\"Created character ID is valid\", function () {\n        pm.expect(response.id).to.be.a(\"number\");\n        pm.expect(response.id).to.be.above(0);\n        pm.expect(Number.isInteger(response.id)).to.be.true;\n    });\n\n    // Save ID only if the response is valid\n    const validResponse =\n        response &&\n        Number.isInteger(response.id) &&\n        response.id > 0 &&\n        response.name === requestBody.name &&\n        response.category === requestBody.category &&\n        response.desc === requestBody.desc &&\n        response.img === requestBody.img;\n\n    if (validResponse) {\n        pm.environment.set(\"unknownCategoryCharacterId\", response.id);\n    }\n};"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Никто\",\n  \"category\": \"nobody\",\n  \"desc\": \"Не бог, не герой и не существо\",\n  \"img\": \"https://example.com/nobody.jpg\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/mythology",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create character - without token",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\npm.test(\"Status code is 401\", function () {\n    pm.response.to.have.status(401);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\n        \"Доступ запрещен. Нужен токен.\"\n    );\n});\n\npm.test(\"Response does not contain character fields\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.not.have.any.keys(\n        \"id\", \"name\", \"category\", \"desc\", \"img\"\n    );\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Гера (без токена)\",\n  \"category\": \"gods\",\n  \"desc\": \"Жена Зевса, царица богов, покровительница брака и семьи\",\n  \"img\": \"https://example.com/gera.jpg\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/mythology",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create character - img is null",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 201\", function () {\n    pm.response.to.have.status(201);\n});\n\npm.test(\"Response body is json\", function () {\n    pm.response.to.be.json;\n});\n\nif (pm.response.code === 201 && pm.response.to.be.json) {\n    const response = pm.response.json();\n\n    const requestBody = JSON.parse(\n        pm.variables.replaceIn(pm.request.body.raw)\n    );\n\n    pm.test(\"Response body is an object\", function () {\n        pm.expect(response).to.be.an(\"object\");\n        pm.expect(response).not.to.be.an(\"array\");\n    });\n\n    pm.test(\"Response contains required fields\", function () {\n        pm.expect(response).to.include.all.keys(\n            \"id\", \"name\", \"category\", \"desc\", \"img\"\n        );\n    });\n\n    pm.test(\"Created character ID is valid\", function () {\n        pm.expect(response.id).to.be.a(\"number\");\n        pm.expect(response.id).to.be.above(0);\n        pm.expect(Number.isInteger(response.id)).to.be.true;\n    });\n\n    pm.test(\"Response matches request data\", function () {\n        pm.expect(response.name).to.eql(requestBody.name);\n        pm.expect(response.category).to.eql(requestBody.category);\n        pm.expect(response.desc).to.eql(requestBody.desc);\n    });\n\n    pm.test(\"Image field is null\", function () {\n        pm.expect(response.img).to.be.null;\n    });\n\n    // Save ID only if the response is valid\n    const validResponse =\n        response &&\n        Number.isInteger(response.id) &&\n        response.id > 0 &&\n        response.name === requestBody.name &&\n        response.category === requestBody.category &&\n        response.desc === requestBody.desc && \n        response.img === null;\n\n    if (validResponse) {\n        pm.environment.set(\"imgIsNullCharacterId\", response.id);\n    }\n\n};"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Some Character\",\n  \"category\": \"gods\",\n  \"desc\": \"\",\n  \"img\": null\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/mythology",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get character - verify null img",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\npm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response body is json\", function () {\n    pm.response.to.be.json;\n});\n\nif (pm.response.code === 200) {\n    const response = pm.response.json();\n\n    pm.test(\"Response body is an object\", function () {\n        pm.expect(response).to.be.an(\"object\");\n        pm.expect(response).to.not.be.null;\n        pm.expect(response).not.to.be.an(\"array\");\n    });\n\n    pm.test(\"Response contains required fields\", function () {\n        pm.expect(response).to.include.all.keys(\n            \"id\", \"name\", \"category\", \"desc\", \"img\"\n        );\n    });\n\n    pm.test(\"Character ID matches created ID\", function () {\n        const expectedId = Number(\n            pm.environment.get(\"imgIsNullCharacterId\")\n        );\n\n        pm.expect(response.id).to.eql(expectedId);\n    });\n\n    pm.test(\"Image field is persisted as null\", function () {\n        pm.expect(response.img).to.be.null;\n    });\n\n    pm.test(\"Character data is persisted correctly\", function () {\n        pm.expect(response.name).to.eql(\"Some Character\");\n        pm.expect(response.category).to.eql(\"gods\");\n        pm.expect(response.desc).to.eql(\"\");\n    });\n}\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{imgIsNullCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{imgIsNullCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create character - missing img",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 201\", function () {\n    pm.response.to.have.status(201);\n});\n\npm.test(\"Response body is json\", function () {\n    pm.response.to.be.json;\n});\n\nif (pm.response.code === 201 && pm.response.to.be.json) {\n    const response = pm.response.json();\n\n    const requestBody = JSON.parse(\n        pm.variables.replaceIn(pm.request.body.raw)\n    );\n\n    pm.test(\"Response body is an object\", function () {\n        pm.expect(response).to.be.an(\"object\");\n        pm.expect(response).not.to.be.an(\"array\");\n    });\n\n    pm.test(\"Response contains required fields\", function () {\n        pm.expect(response).to.include.all.keys(\n            \"id\", \"name\", \"category\", \"desc\", \"img\"\n        );\n    });\n\n    pm.test(\"Created character ID is valid\", function () {\n        pm.expect(response.id).to.be.a(\"number\");\n        pm.expect(response.id).to.be.above(0);\n        pm.expect(Number.isInteger(response.id)).to.be.true;\n    });\n\n    pm.test(\"Response matches request data\", function () {\n        pm.expect(response.name).to.eql(requestBody.name);\n        pm.expect(response.category).to.eql(requestBody.category);\n        pm.expect(response.desc).to.eql(requestBody.desc);\n    });\n\n    pm.test(\"Image field is missing in request\", function () {\n        pm.expect(requestBody).to.not.have.property(\"img\");\n    });\n\n    pm.test(\"Image field defaults to null\", function () {\n        pm.expect(response.img).to.be.null;\n    });\n\n    // Save ID only if the response is valid\n    const validResponse =\n        response &&\n        Number.isInteger(response.id) &&\n        response.id > 0 &&\n        response.name === requestBody.name &&\n        response.category === requestBody.category &&\n        response.desc === requestBody.desc;\n\n    if (validResponse) {\n        pm.environment.set(\"missingImgCharacterId\", response.id);\n    }\n};"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Some Character 2\",\n  \"category\": \"gods\",\n  \"desc\": \"\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/mythology",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get character - verify missing img",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\npm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response body is json\", function () {\n    pm.response.to.be.json;\n});\n\nif (pm.response.code === 200) {\n    const response = pm.response.json();\n\n    pm.test(\"Response body is an object\", function () {\n        pm.expect(response).to.be.an(\"object\");\n        pm.expect(response).to.not.be.null;\n        pm.expect(response).not.to.be.an(\"array\");\n    });\n\n    pm.test(\"Response contains required fields\", function () {\n        pm.expect(response).to.include.all.keys(\n            \"id\", \"name\", \"category\", \"desc\", \"img\"\n        );\n    });\n\n    pm.test(\"Character ID matches created ID\", function () {\n        const expectedId = Number(\n            pm.environment.get(\"missingImgCharacterId\")\n        );\n\n        pm.expect(response.id).to.eql(expectedId);\n    });\n\n    pm.test(\"Image field is persisted as null\", function () {\n        pm.expect(response.img).to.be.null;\n    });\n\n    pm.test(\"Character data is persisted correctly\", function () {\n        pm.expect(response.name).to.eql(\"Some Character 2\");\n        pm.expect(response.category).to.eql(\"gods\");\n        pm.expect(response.desc).to.eql(\"\");\n    });\n}\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{missingImgCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{missingImgCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "PUT-Update",
+          "item": [
+            {
+              "name": "Update character - valid data",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response body is json\", function () {\n    pm.response.to.be.json;\n});\n\nif (pm.response.code === 200 && pm.response.to.be.json) {\n    const response = pm.response.json();\n\n    const requestBody = JSON.parse(\n        pm.variables.replaceIn(pm.request.body.raw)\n    );\n\n    pm.test(\"Response body is an object\", function () {\n        pm.expect(response).to.be.an(\"object\");\n        pm.expect(response).not.to.be.an(\"array\");\n    });\n\n    pm.test(\"Response contains required fields\", function () {\n        pm.expect(response).to.include.all.keys(\n            \"id\", \"name\", \"category\", \"desc\", \"img\"\n        );\n    });\n\n    pm.test(\"Updated character ID matches requested ID\", function () {\n        const requestedId = Number(\n            pm.variables.get(\"createdCharacterId\")\n        );\n\n        pm.expect(response.id).to.eql(requestedId);\n    });\n\n    pm.test(\"Response matches updated data\", function () {\n        pm.expect(response.name).to.eql(requestBody.name);\n        pm.expect(response.category).to.eql(requestBody.category);\n        pm.expect(response.desc).to.eql(requestBody.desc);\n        pm.expect(response.img).to.eql(requestBody.img);\n    });\n};"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Гера обновленная\",\n  \"category\": \"heroes\",\n  \"desc\": \"Жена Зевса, царица богов, покровительница брака и семьи. Теперь герой\",\n  \"img\": \"https://example.com/new_gera.jpg\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{createdCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{createdCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get updated character - verify persistence",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const response = pm.response.json();\n\npm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Returned ID matches updated character ID\", function () {\n    const expectedId = Number(\n        pm.variables.get(\"createdCharacterId\")\n    );\n\n    pm.expect(response.id).to.eql(expectedId);\n});\n\npm.test(\"Updated character data is persisted\", function () {\n    pm.expect(response.name).to.eql(\"Гера обновленная\");\n    pm.expect(response.category).to.eql(\"heroes\");\n    pm.expect(response.desc).to.eql(\n        \"Жена Зевса, царица богов, покровительница брака и семьи. Теперь герой\"\n    );\n    pm.expect(response.img).to.eql(\n        \"https://example.com/new_gera.jpg\"\n    );\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{createdCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{createdCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update character - missing name",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\npm.test(\"Status code is 400\", function () {\n    pm.response.to.have.status(400);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\n        \"Для PUT запроса необходимо передать все поля: name, category, desc.\"\n    );\n});\n\npm.test(\"Response does not contain character fields\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.not.have.any.keys(\n        \"id\", \"name\", \"category\", \"desc\", \"img\"\n    );\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"\",\n  \"category\": \"heroes\",\n  \"desc\": \"Гера без имени\",\n  \"img\": \"https://example.com/noname_gera.jpg\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{createdCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{createdCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update character - missing category",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\npm.test(\"Status code is 400\", function () {\n    pm.response.to.have.status(400);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\n        \"Для PUT запроса необходимо передать все поля: name, category, desc.\"\n    );\n});\n\npm.test(\"Response does not contain character fields\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.not.have.any.keys(\n        \"id\", \"name\", \"category\", \"desc\", \"img\"\n    );\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Гера героиня\",\n  \"category\": \"\",\n  \"desc\": \"Гера без категории\",\n  \"img\": \"https://example.com/nocategory_gera.jpg\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{createdCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{createdCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update character - protected ID",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\npm.test(\"Status code is 403\", function () {\n    pm.response.to.have.status(403);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\n        \"Запрещено! Базовые персонажи (ID 1-31) доступны только для чтения.\"\n    );\n});\n\npm.test(\"Response does not contain character fields\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.not.have.any.keys(\n        \"id\", \"name\", \"category\", \"desc\", \"img\"\n    );\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"Геракл!\",\n    \"category\": \"gods\",\n    \"desc\": \"Сын Зевса и Алкмены, совершивший двенадцать легендарных подвигов. Добавлена новая легенда\",\n    \"img\": \"https://raw.githubusercontent.com/artichokeee/gifs/main/Греция/Геракл.png\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{protectedCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{protectedCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update character - not found",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\npm.test(\"Status code is 404\", function () {\n    pm.response.to.have.status(404);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\n        \"Персонаж не найден\"\n    );\n});\n\npm.test(\"Response does not contain character fields\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.not.have.any.keys(\n        \"id\", \"name\", \"category\", \"desc\", \"img\"\n    );\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Новое существо\",\n  \"category\": \"creatures\",\n  \"desc\": \"Обновленное существо\",\n  \"img\": \"https://example.com/creature.jpg\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{nonExistentCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{nonExistentCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update character - without token",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\npm.test(\"Status code is 401\", function () {\n    pm.response.to.have.status(401);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\n        \"Доступ запрещен. Нужен токен.\"\n    );\n});\n\npm.test(\"Response does not contain character fields\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.not.have.any.keys(\n        \"id\", \"name\", \"category\", \"desc\", \"img\"\n    );\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Гера обновленная без токена\",\n  \"category\": \"heroes\",\n  \"desc\": \"Жена Зевса, царица богов, покровительница брака и семьи. Теперь герой\",\n  \"img\": \"https://example.com/new_gera.jpg\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{createdCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{createdCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "PATCH-Update",
+          "item": [
+            {
+              "name": "GET Character before PATCH",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\npm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response body is JSON\", function () {\n    pm.response.to.be.json;\n});\n\nconst response = pm.response.json();\n\npm.test(\"Response body is an object\", function () {\n    pm.expect(response).to.be.an(\"object\");\n    pm.expect(response).not.to.be.an(\"array\");\n});\n\npm.test(\"Response contains required fields\", function () {\n    pm.expect(response).to.include.all.keys(\n        \"id\", \"name\", \"category\", \"desc\", \"img\"\n    );\n});\n\npm.test(\"Character ID matches requested ID\", function () {\n    const requestedId = Number(\n        pm.variables.get(\"createdCharacterId\")\n    );\n\n    pm.expect(response.id).to.eql(requestedId);\n});\n\npm.test(\"Save original character data\", function () {\n    pm.collectionVariables.set(\n        \"characterBeforePatch\",\n        JSON.stringify(response)\n    );\n\n    pm.expect(\n        pm.collectionVariables.get(\"characterBeforePatch\")\n    ).to.exist;\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{createdCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{createdCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Patch character - valid data",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response body is json\", function () {\n    pm.response.to.be.json;\n});\n\nif (pm.response.code === 200 && pm.response.to.be.json) {\n    const response = pm.response.json();\n\n    const requestBody = JSON.parse(\n        pm.variables.replaceIn(pm.request.body.raw)\n    );\n\n    pm.test(\"Response body is an object\", function () {\n        pm.expect(response).to.be.an(\"object\");\n        pm.expect(response).not.to.be.an(\"array\");\n    });\n\n    pm.test(\"Response contains required fields\", function () {\n        pm.expect(response).to.include.all.keys(\n            \"id\", \"name\", \"category\", \"desc\", \"img\"\n        );\n    });\n\n    pm.test(\"Updated character ID matches requested ID\", function () {\n        const requestedId = Number(\n            pm.variables.get(\"createdCharacterId\")\n        );\n\n        pm.expect(response.id).to.eql(requestedId);\n    });\n\n    pm.test(\"Description was updated\", function () {\n        const requestBody = JSON.parse(pm.request.body.raw);\n\n        pm.expect(response.desc).to.eql(requestBody.desc);\n    });\n\n    pm.test(\"Save expected PATCH description\", function () {\n        const requestBody = JSON.parse(pm.request.body.raw);\n\n        pm.expect(requestBody).to.have.property(\"desc\");\n\n        pm.collectionVariables.set(\n            \"expectedPatchDesc\",\n            requestBody.desc\n        );\n    });\n};"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"desc\": \"Гера — богиня брака и семьи. Описание обновлено через PATCH.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{createdCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{createdCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET Character after PATCH",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\npm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response body is JSON\", function () {\n    pm.response.to.be.json;\n});\n\nconst response = pm.response.json();\n\nconst originalData = JSON.parse(\n    pm.collectionVariables.get(\"characterBeforePatch\")\n);\n\nconst expectedDesc = pm.collectionVariables.get(\n    \"expectedPatchDesc\"\n);\n\npm.test(\"Response body is an object\", function () {\n    pm.expect(response).to.be.an(\"object\");\n    pm.expect(response).not.to.be.an(\"array\");\n});\n\npm.test(\"Response contains required fields\", function () {\n    pm.expect(response).to.include.all.keys(\n        \"id\", \"name\", \"category\", \"desc\", \"img\"\n    );\n});\n\npm.test(\"Character ID has not changed\", function () {\n    pm.expect(response.id).to.eql(originalData.id);\n});\n\npm.test(\"Description was updated\", function () {\n    pm.expect(response.desc).to.eql(expectedDesc);\n});\n\npm.test(\"Name has not changed\", function () {\n    pm.expect(response.name).to.eql(originalData.name);\n});\n\npm.test(\"Category has not changed\", function () {\n    pm.expect(response.category).to.eql(originalData.category);\n});\n\npm.test(\"Image has not changed\", function () {\n    pm.expect(response.img).to.eql(originalData.img);\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{createdCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{createdCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET Character before multiple PATCH",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\npm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response body is JSON\", function () {\n    pm.response.to.be.json;\n});\n\nconst response = pm.response.json();\n\npm.test(\"Response body is an object\", function () {\n    pm.expect(response).to.be.an(\"object\");\n    pm.expect(response).not.to.be.an(\"array\");\n});\n\npm.test(\"Response contains required fields\", function () {\n    pm.expect(response).to.include.all.keys(\n        \"id\", \"name\", \"category\", \"desc\", \"img\"\n    );\n});\n\npm.test(\"Character ID matches requested ID\", function () {\n    const requestedId = Number(\n        pm.variables.get(\"createdCharacterId\")\n    );\n\n    pm.expect(response.id).to.eql(requestedId);\n});\n\npm.test(\"Save original character data\", function () {\n    pm.collectionVariables.set(\n        \"characterBeforeMultiplePatch\",\n        JSON.stringify(response)\n    );\n\n    pm.expect(\n        pm.collectionVariables.get(\"characterBeforeMultiplePatch\")\n    ).to.exist;\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{createdCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{createdCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Patch character - multiple fields",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\npm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response body is JSON\", function () {\n    pm.response.to.be.json;\n});\n\nconst response = pm.response.json();\nconst requestBody = JSON.parse(pm.request.body.raw);\n\npm.test(\"Response body is an object\", function () {\n    pm.expect(response).to.be.an(\"object\");\n    pm.expect(response).not.to.be.an(\"array\");\n});\n\npm.test(\"Response contains required fields\", function () {\n    pm.expect(response).to.include.all.keys(\n        \"id\", \"name\", \"category\", \"desc\", \"img\"\n    );\n});\n\npm.test(\"Updated character ID matches requested ID\", function () {\n    const requestedId = Number(\n        pm.variables.get(\"createdCharacterId\")\n    );\n\n    pm.expect(response.id).to.eql(requestedId);\n});\n\npm.test(\"Name and category were updated\", function () {\n    pm.expect(response.name).to.eql(requestBody.name);\n    pm.expect(response.category).to.eql(requestBody.category);\n\n    pm.collectionVariables.set(\n        \"expectedPatchName\",\n        requestBody.name\n    );\n\n    pm.collectionVariables.set(\n        \"expectedPatchCategory\",\n        requestBody.category\n    );\n});\n\npm.test(\"Other fields have not changed\", function () {\n    const originalData = JSON.parse(\n        pm.collectionVariables.get(\"characterBeforeMultiplePatch\")\n    );\n\n    pm.expect(response.desc).to.eql(originalData.desc);\n    pm.expect(response.img).to.eql(originalData.img);\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"Гера - богиня Олимпа\",\n    \"category\": \"gods\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{createdCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{createdCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET Character after multiple PATCH",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\npm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response body is JSON\", function () {\n    pm.response.to.be.json;\n});\n\nconst response = pm.response.json();\n\nconst originalData = JSON.parse(\n    pm.collectionVariables.get(\"characterBeforeMultiplePatch\")\n);\n\nconst expectedPatchName = pm.collectionVariables.get(\n    \"expectedPatchName\"\n);\n\nconst expectedPatchCategory = pm.collectionVariables.get(\n    \"expectedPatchCategory\"\n);\n\npm.test(\"Response body is an object\", function () {\n    pm.expect(response).to.be.an(\"object\");\n    pm.expect(response).not.to.be.an(\"array\");\n});\n\npm.test(\"Response contains required fields\", function () {\n    pm.expect(response).to.include.all.keys(\n        \"id\", \"name\", \"category\", \"desc\", \"img\"\n    );\n});\n\npm.test(\"Character ID has not changed\", function () {\n    pm.expect(response.id).to.eql(originalData.id);\n});\n\npm.test(\"Description has not changed \", function () {\n    //pm.expect(response.desc).to.eql(expectedDesc);\n    pm.expect(response.desc).to.eql(originalData.desc);\n});\n\npm.test(\"Name was updated\", function () {\n    pm.expect(response.name).to.eql(expectedPatchName);\n});\n\npm.test(\"Category was updated\", function () {\n    pm.expect(response.category).to.eql(expectedPatchCategory);\n});\n\npm.test(\"Image has not changed\", function () {\n    pm.expect(response.img).to.eql(originalData.img);\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{createdCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{createdCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Patch character - empty body",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\npm.test(\"Status code is 400\", function () {\n    pm.response.to.have.status(400);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\n        \"Тело запроса не может быть пустым.\"\n    );\n});\n\npm.test(\"Response does not contain character fields\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.not.have.any.keys(\n        \"id\", \"name\", \"category\", \"desc\", \"img\"\n    );\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{createdCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{createdCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Patch character - protected ID",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\npm.test(\"Status code is 403\", function () {\n    pm.response.to.have.status(403);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\n        \"Запрещено! Базовые персонажи (ID 1-31) доступны только для чтения.\"\n    );\n});\n\npm.test(\"Response does not contain character fields\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.not.have.any.keys(\n        \"id\", \"name\", \"category\", \"desc\", \"img\"\n    );\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"desc\": \"Добавлена новая легенда для Геракла\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{protectedCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{protectedCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Patch character - not found",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\npm.test(\"Status code is 404\", function () {\n    pm.response.to.have.status(404);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\n        \"Персонаж не найден\"\n    );\n});\n\npm.test(\"Response does not contain character fields\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.not.have.any.keys(\n        \"id\", \"name\", \"category\", \"desc\", \"img\"\n    );\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"desc\": \"Добавлена новая легенда для несуществующего персонажа\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{nonExistentCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{nonExistentCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Patch character - without token",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\npm.test(\"Status code is 401\", function () {\n    pm.response.to.have.status(401);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\n        \"Доступ запрещен. Нужен токен.\"\n    );\n});\n\npm.test(\"Response does not contain character fields\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.not.have.any.keys(\n        \"id\", \"name\", \"category\", \"desc\", \"img\"\n    );\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Никто\",\n  \"category\": \"nobody\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{createdCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{createdCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Patch character - invalid ID format",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 400\", function () {\n    pm.response.to.have.status(400);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\n        \"ID должен быть положительным целым числом.\");\n});\n\npm.test(\"Response does not contain character fields\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.not.have.any.keys(\n        \"id\", \"name\", \"category\", \"desc\", \"img\"\n    );\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Никто\",\n  \"category\": \"nobody\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{invalidCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{invalidCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "DELETE-Remove",
+          "item": [
+            {
+              "name": "Delete character - valid ID",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 204\", function () {\n    pm.response.to.have.status(204);\n});\n\npm.test(\"Response body is empty\", function () {\n    pm.expect(pm.response.text()).to.be.empty;\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{createdCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{createdCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get deleted character - not found",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 404\", function () {\n    pm.response.to.have.status(404);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\"Персонаж не найден\");\n});\n\n// Cleanup environment variable\nif (pm.response.code === 404) {\n    pm.environment.unset(\"createdCharacterId\");\n}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{createdCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{createdCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete character - protected ID",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\npm.test(\"Status code is 403\", function () {\n    pm.response.to.have.status(403);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\n        \"Запрещено! Базовые персонажи (ID 1-31) доступны только для чтения.\"\n    );\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{protectedCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{protectedCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete character - not found",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\npm.test(\"Status code is 404\", function () {\n    pm.response.to.have.status(404);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\n        \"Персонаж не найден\"\n    );\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{nonExistentCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{nonExistentCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete character - without token",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "\npm.test(\"Status code is 401\", function () {\n    pm.response.to.have.status(401);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\n        \"Доступ запрещен. Нужен токен.\"\n    );\n});\n\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{createdCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{createdCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete character with unknown category",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 204\", function () {\n    pm.response.to.have.status(204);\n});\n\npm.test(\"Response body is empty\", function () {\n    pm.expect(pm.response.text()).to.be.empty;\n});\n\n\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{unknownCategoryCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{unknownCategoryCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get character with unknown category - verify deletion",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 404\", function () {\n    pm.response.to.have.status(404);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\"Персонаж не найден\");\n});\n\n// Cleanup environment variable\nif (pm.response.code === 404) {\n    pm.environment.unset(\"unknownCategoryCharacterId\");\n}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{unknownCategoryCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{unknownCategoryCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete character with img is null",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 204\", function () {\n    pm.response.to.have.status(204);\n});\n\npm.test(\"Response body is empty\", function () {\n    pm.expect(pm.response.text()).to.be.empty;\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{imgIsNullCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{imgIsNullCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get character with img is null - verify deletion",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 404\", function () {\n    pm.response.to.have.status(404);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\"Персонаж не найден\");\n});\n\n// Cleanup environment variable\nif (pm.response.code === 404) {\n    pm.environment.unset(\"imgIsNullCharacterId\");\n}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{imgIsNullCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{imgIsNullCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete character with missing img",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 204\", function () {\n    pm.response.to.have.status(204);\n});\n\npm.test(\"Response body is empty\", function () {\n    pm.expect(pm.response.text()).to.be.empty;\n});\n"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{missingImgCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{missingImgCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get character with missing img - verify deletion",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 404\", function () {\n    pm.response.to.have.status(404);\n});\n\npm.test(\"Response body contains error message\", function () {\n    const response = pm.response.json();\n\n    pm.expect(response).to.have.property(\"error\");\n    pm.expect(response.error).to.eql(\"Персонаж не найден\");\n});\n\n// Cleanup environment variable\nif (pm.response.code === 404) {\n    pm.environment.unset(\"missingImgCharacterId\");\n}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/mythology/{{missingImgCharacterId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "mythology",
+                    "{{missingImgCharacterId}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "characterBeforePatch",
+      "value": ""
+    },
+    {
+      "key": "expectedPatchDesc",
+      "value": ""
+    },
+    {
+      "key": "characterBeforeMultiplePatch",
+      "value": ""
+    },
+    {
+      "key": "expectedPatchName",
+      "value": ""
+    },
+    {
+      "key": "expectedPatchCategory",
+      "value": ""
+    }
+  ]
+}
